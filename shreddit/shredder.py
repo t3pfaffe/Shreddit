@@ -46,7 +46,7 @@ class Shredder(object):
                 self._whitelist.add(str(subreddit).lower())
 
         # Add any multireddit subreddits to the blacklist
-        self._blacklist = set()
+        self._blacklist = set([s.lower() for s in self._blacklist])
         for username, multiname in self._multi_blacklist:
             multireddit = self._r.multireddit(username, multiname)
             for subreddit in multireddit.subreddits:
@@ -64,7 +64,7 @@ class Shredder(object):
         if self._keep_a_copy and self._save_directory:
             self._logger.info("Saving deleted items to: {}".format(self._save_directory))
         if self._trial_run:
-            self._logger.info("Trial run - no deletion will be performed")
+            self._logger.info("Trial run - no deletion will be performed TESST!!")
 
     def shred(self):
         deleted = self._remove_things(self._build_iterator())
@@ -163,18 +163,18 @@ class Shredder(object):
             self._logger.debug("Examining item {}: {}".format(count, item))
             created = arrow.get(item.created_utc)
             if str(item.subreddit).lower() in self._blacklist:
-                self._logger.debug("Deleting due to blacklist")
+                self._logger.debug("Deleting due to blacklist (" + str(item.subreddit).lower() + ")")
                 count_removed += 1
                 self._remove(item)
-            elif created <= self._nuke_cutoff:
-                self._logger.debug("Item occurs prior to nuke cutoff")
-                count_removed += 1
-                self._remove(item)
+            # elif created <= self._nuke_cutoff:
+            #     self._logger.debug("Item occurs prior to nuke cutoff")
+            #     count_removed += 1
+            #     self._remove(item)
             elif self._check_whitelist(item):
-                self._logger.debug("Skipping due to: whitelisted")
+                self._logger.debug("Skipping due to: whitelisted (" + str(item.subreddit).lower() + ")")
                 continue
             elif created > self._recent_cutoff:
-                self._logger.debug("Skipping due to: too recent")
+                self._logger.debug("Skipping due to: too recent (" + str(created) + ")")
                 continue
             else:
                 count_removed += 1

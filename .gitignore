@@ -60,3 +60,6 @@ target/
 # Can be unstaged
 .errors
 pip-selfcheck.json
+
+# Add backup dir
+deleted-backup/

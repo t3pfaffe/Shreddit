@@ -7,7 +7,7 @@ import os
 import pkg_resources
 from appdirs import user_config_dir
 from shreddit import default_config
-from shreddit.shredder import Shredder
+from shredder import Shredder
 
 
 def main():
